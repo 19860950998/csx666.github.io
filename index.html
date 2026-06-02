@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精准减脂规划生成器</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"Microsoft YaHei",sans-serif;background:linear-gradient(135deg,#4CAF50,#81C784);min-height:100vh;padding:20px;}
+.container{max-width:700px;margin:auto;background:#fff;border-radius:20px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,.15);}
+.logo{text-align:center;font-size:32px;margin-bottom:10px;}
+h1{text-align:center;margin-bottom:10px;color:#222;}
+.subtitle{text-align:center;color:#666;margin-bottom:25px;}
+.banner{background:#e8f5e9;padding:15px;border-radius:12px;margin-bottom:20px;text-align:center;font-weight:bold;color:#2e7d32;}
+input,select{width:100%;padding:14px;margin-bottom:12px;border:1px solid #ddd;border-radius:10px;font-size:15px;}
+button{width:100%;padding:15px;background:#28a745;color:#fff;font-size:18px;font-weight:bold;border:none;border-radius:10px;cursor:pointer;}
+button:hover{opacity:.95;}
+.result{display:none;margin-top:20px;background:#f8f9fa;padding:20px;border-radius:12px;line-height:1.9;}
+.score{font-size:28px;font-weight:bold;color:#28a745;}
+.contact{margin-top:20px;background:#fff8e1;padding:18px;border-radius:12px;border:1px solid #ffe082;text-align:center;}
+.contact h3{margin-bottom:10px;}
+.wx{font-size:24px;font-weight:bold;color:#e53935;}
+.footer{margin-top:20px;text-align:center;font-size:12px;color:#999;}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="logo">🔥</div>
+<h1>精准减脂规划生成器</h1>
+<div class="subtitle">输入基础信息，30秒获取减脂方案</div>
+<div class="banner">已有超过1000+用户使用减脂规划工具</div>
+
+<select id="gender">
+<option value="">请选择性别</option>
+<option value="男">男</option>
+<option value="女">女</option>
+</select>
+<input type="number" id="age" placeholder="请输入年龄">
+<input type="number" id="height" placeholder="请输入身高(cm)">
+<input type="number" id="weight" placeholder="请输入体重(kg)">
+<input type="number" id="targetWeight" placeholder="请输入目标体重(kg)">
+<select id="exercise">
+<option value="">请选择运动频率</option>
+<option>很少运动</option>
+<option>每周1-2次</option>
+<option>每周3-5次</option>
+<option>几乎每天</option>
+</select>
+<button onclick="generatePlan()">立即生成减脂方案</button>
+<div id="result" class="result"></div>
+<div class="footer">健康减脂建议仅供参考</div>
+</div>
+
+<script>
+function generatePlan(){
+const gender=document.getElementById("gender").value;
+const age=parseFloat(document.getElementById("age").value);
+const height=parseFloat(document.getElementById("height").value);
+const weight=parseFloat(document.getElementById("weight").value);
+const targetWeight=parseFloat(document.getElementById("targetWeight").value);
+const exercise=document.getElementById("exercise").value;
+
+if(!gender||!age||!height||!weight||!targetWeight||!exercise){
+alert("请完整填写信息");
+return;
+}
+
+const h=height/100;
+const bmi=(weight/(h*h)).toFixed(1);
+let level="",advice="",calories="";
+if(bmi<18.5){level="偏瘦";advice="建议增加蛋白质摄入和力量训练。";calories="2200-2600大卡";}
+else if(bmi<24){level="正常";advice="保持均衡饮食和规律运动。";calories="1800-2200大卡";}
+else if(bmi<28){level="超重";advice="控制糖分摄入，加强有氧训练。";calories="1500-1900大卡";}
+else{level="肥胖";advice="建议进行系统减脂管理。";calories="1300-1700大卡";}
+
+let loseWeight=(weight-targetWeight).toFixed(1);
+if(loseWeight<0){loseWeight=0;}
+let weeks=Math.ceil(loseWeight/0.7);
+if(weeks<1){weeks=1;}
+
+document.getElementById("result").style.display="block";
+document.getElementById("result").innerHTML=`
+<h2>📊 您的减脂分析报告</h2>
+<p>当前BMI指数：</p>
+<div class="score">${bmi}</div>
+<p><strong>体重等级：</strong>${level}</p>
+<p><strong>目标减重：</strong>${loseWeight} kg</p>
+<p><strong>预计周期：</strong>${weeks} 周左右</p>
+<p><strong>每日建议热量：</strong>${calories}</p>
+<p><strong>运动频率：</strong>${exercise}</p>
+<p><strong>减脂建议：</strong>${advice}</p>
+<hr>
+<h3>专属行动建议</h3>
+<p>✅ 每天饮水 2000ml+</p>
+<p>✅ 每天步数 8000+</p>
+<p>✅ 保证蛋白质摄入</p>
+<p>✅ 每周力量训练3次以上</p>
+<div class="contact">
+<h3>🎁 领取专属饮食+训练方案</h3>
+<p>添加微信领取完整版减脂计划</p>
+<div class="wx">s0831cx</div>
+<p>添加备注：减脂计划</p>
+</div>
+`;
+}
+</script>
+</body>
+</html>
